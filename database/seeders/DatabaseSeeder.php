@@ -15,6 +15,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-
+        User::factory()->create([
+            'name' => 'Admin',
+            'email' => 'admin@kairo.app',
+            'password' => bcrypt(config('app.admin_password', 'password')),
+        ]);
     }
 }
