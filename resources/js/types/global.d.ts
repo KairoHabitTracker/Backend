@@ -1,6 +1,7 @@
-import ziggyRoute from 'ziggy-js';
+import { route as ziggyRoute, Config as ZiggyConfig } from 'ziggy-js';
 import { PageProps as InertiaPageProps } from '@inertiajs/core';
 import { PageProps as AppPageProps } from './';
+import { AxiosInstance } from 'axios';
 
 declare global {
     interface Window {
@@ -8,6 +9,7 @@ declare global {
     }
 
     const route: typeof ziggyRoute;
+    const Ziggy: ZiggyConfig;
 }
 
 declare module 'vue' {
@@ -19,5 +21,3 @@ declare module 'vue' {
 declare module '@inertiajs/core' {
     interface PageProps extends InertiaPageProps, AppPageProps {}
 }
-
-export {};

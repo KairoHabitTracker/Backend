@@ -42,6 +42,9 @@ importers:
       vue-tsc:
         specifier: ^3.1.1
         version: 3.1.1(typescript@5.9.3)
+      ziggy-js:
+        specifier: ^2.6.0
+        version: 2.6.0
 
 packages:
 
@@ -824,6 +827,10 @@ packages:
   proxy-from-env@1.1.0:
     resolution: {integrity: sha512-D+zkORCbA9f1tdWRK0RaCR3GPv50cMxcrz4X8k5LTSUD1Dkw47mKJEZQNunItRTkWwgtaUSo1RVFRIG9ZXiFYg==}
 
+  qs-esm@7.0.2:
+    resolution: {integrity: sha512-D8NAthKSD7SGn748v+GLaaO6k08Mvpoqroa35PqIQC4gtUa8/Pb/k+r0m0NnGBVbHDP1gKZ2nVywqfMisRhV5A==}
+    engines: {node: '>=18'}
+
   qs@6.14.0:
     resolution: {integrity: sha512-YWWTjgABSKcvs/nWBi9PycY/JiPJqOD4JA6o9Sej2AtvSGarXxKC3OQSk4pAarbdQlKAh5D4FCQkJNkW+GAn3w==}
     engines: {node: '>=0.6'}
@@ -986,6 +993,9 @@ packages:
   yargs@17.7.2:
     resolution: {integrity: sha512-7dSzzRQ++CKnNI/krKnYRV7JKKPUXMEh61soaHKg9mrWEhzFWhFnxPxGl+69cD1Ou63C13NUPCnmIcrvqCuM6w==}
     engines: {node: '>=12'}
+
+  ziggy-js@2.6.0:
+    resolution: {integrity: sha512-V6xeZKEG67xt5Qtli5nCpQrc5TXW/tf3dKu2QLJS2TCxe+xxo/5AusT7M3MwX4nNeSEKBJMIvVJz2dlt+ziWYQ==}
 
 snapshots:
 
@@ -1635,6 +1645,8 @@ snapshots:
 
   proxy-from-env@1.1.0: {}
 
+  qs-esm@7.0.2: {}
+
   qs@6.14.0:
     dependencies:
       side-channel: 1.1.0
@@ -1803,3 +1815,7 @@ snapshots:
       string-width: 4.2.3
       y18n: 5.0.8
       yargs-parser: 21.1.1
+
+  ziggy-js@2.6.0:
+    dependencies:
+      qs-esm: 7.0.2
