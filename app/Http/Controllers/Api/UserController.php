@@ -5,11 +5,12 @@ namespace App\Http\Controllers\Api;
 use App\Models\User;
 use Illuminate\Http\Request;
 
-class RegisterController
+class UserController
 {
     public function store(Request $request)
     {
         $request->validate([
+            'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email'],
             'password' => ['required', 'min:8'],
             'device_name' => ['required'],
@@ -21,6 +22,7 @@ class RegisterController
         }
 
         $user = User::factory()->create([
+            'name' => $request->name,
             'email' => $request->email,
             'password' => bcrypt($request->password),
         ]);

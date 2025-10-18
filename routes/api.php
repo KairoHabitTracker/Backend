@@ -15,6 +15,8 @@ Route::group(
         'as' => 'auth.'
     ],
     function () {
-        Route::post('/register', [Api\RegisterController::class, 'store'])->name('register');
+        Route::post('/login', [Api\LoginController::class, 'store'])->name('login');
+        Route::any('/logout', [Api\LoginController::class, 'destroy'])->name('logout');
+        Route::post('/register', [Api\UserController::class, 'store'])->name('register');
     }
 );
