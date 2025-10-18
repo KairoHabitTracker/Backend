@@ -19,7 +19,7 @@ onMounted(() => {
                     <input ref="input" type="password" name="password" placeholder="Password" class="input" required />
                     <span class="text-red-400" v-if="errors.password">{{ errors.password }}</span>
                     <div class="card-actions justify-end">
-                        <button @click="clearErrors" type="submit" :disabled="processing" class="btn btn-primary">
+                        <button @click="clearErrors()" type="submit" :disabled="processing" class="btn btn-primary">
                             {{ processing ? 'Logging in...' : 'Login' }}
                         </button>
                     </div>
