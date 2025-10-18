@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import DefaultLayout from "@/Pages/Layouts/DefaultLayout.vue";
+import DashboardLayout from "@/Pages/Layouts/DashboardLayout.vue";
 </script>
 
 <template>
-    <DefaultLayout></DefaultLayout>
+    <DashboardLayout></DashboardLayout>
 </template>
