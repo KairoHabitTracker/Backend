@@ -4,6 +4,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api;
 
+Route::get('/', function (Request $request) {
+    return response()->json(['message' => 'API is working']);
+});
+
 Route::group(
     [
         'middleware' => 'guest:api',
