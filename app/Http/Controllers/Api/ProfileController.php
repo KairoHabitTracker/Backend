@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 
 class ProfileController
 {
-    public function index(Request $request) {
-        $user = $request->user()->load('info');
-        return response()->json(['user' => $user], 200);
+    public function index(Request $request): UserResource {
+        return $request->user()->toResource();
     }
 }
