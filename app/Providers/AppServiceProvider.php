@@ -29,9 +29,6 @@ class AppServiceProvider extends ServiceProvider
         });
 
         Scramble::configure()->withDocumentTransformers(function (OpenApi $document) {
-            $document->info->version = '0';
-            $document->info->title = 'Kairo API Documentation';
-            $document->info->description = 'Generated API documentation for Kairo Habit Tracker app backend.';
             $document->secure(
                 SecurityScheme::http('bearer')
             );
