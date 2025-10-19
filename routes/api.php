@@ -16,7 +16,18 @@ Route::group(
     ],
     function () {
         Route::post('/login', [Api\LoginController::class, 'store'])->name('login');
-        Route::any('/logout', [Api\LoginController::class, 'destroy'])->name('logout');
         Route::post('/register', [Api\UserController::class, 'store'])->name('register');
+    }
+);
+
+Route::group(
+    [
+        'middleware' => 'auth:api',
+
+    ],
+    function () {
+        Route::any('/auth/logout', [Api\LoginController::class, 'destroy'])->name('auth.logout');
+
+        Route::get('/profile', [Api\ProfileController::class,'index'])->name('profile.index');
     }
 );

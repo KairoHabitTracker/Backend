@@ -3,14 +3,17 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\User;
+use Faker\Factory;
 use Illuminate\Http\Request;
 
 class UserController
 {
+    /**
+     * @unauthenticated
+     */
     public function store(Request $request)
     {
         $request->validate([
-            'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email'],
             'password' => ['required', 'min:8'],
             'device_name' => ['required'],
@@ -21,10 +24,16 @@ class UserController
             return response()->json(['message' => 'Email already exists'], 422);
         }
 
-        $user = User::factory()->create([
-            'name' => $request->name,
+        $user = User::create([
             'email' => $request->email,
             'password' => bcrypt($request->password),
+        ]);
+
+        $faker = Factory::create();
+
+        $user->info()->create([
+            'name' => ucfirst(explode('@', $request->email)[0]),
+            'avatar_url' => 'https://api.dicebear.com/9.x/identicon/svg?seed=' . $faker->uuid(),
         ]);
 
         $token = $user->createToken($request->device_name)->plainTextToken;
