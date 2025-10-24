@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Resources\UserHabitResource;
-use Dedoc\Scramble\Attributes\QueryParameter;
+use App\Rules\DaysOfWeek;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
@@ -28,21 +28,10 @@ class UserHabitController
             /**
              * @example ["monday", "wednesday", "friday"]
              */
-            'days_of_week' => 'nullable|array',
+            'days_of_week' => ['nullable','array', new DaysOfWeek],
             'start_date' => 'nullable|date',
             'end_date' => 'nullable|date|after_or_equal:start_date',
         ]);
-
-        if ($request->has('days_of_week')) {
-            $days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
-            foreach ($request->days_of_week as $day) {
-                if (!in_array(strtolower($day), $days)) {
-                    throw ValidationException::withMessages([
-                        'days_of_week' => "The day '$day' is not a valid day of the week. Valid days are: " . implode(', ', $days) . ".",
-                    ]);
-                }
-            }
-        }
 
         $userHabit = $request->user()->habits()->create([
             'habit_id' => $request->habit_id,
@@ -53,5 +42,43 @@ class UserHabitController
         ]);
 
         return new UserHabitResource($userHabit);
+    }
+
+    /**
+     * Update a user habit
+     */
+    public function update(Request $request, $id)
+    {
+        $userHabit = $request->user()->habits()->findOrFail($id);
+
+        $request->validate([
+            'notification_time' => 'nullable|date_format:H:i',
+            /**
+             * @example ["monday", "wednesday", "friday"]
+             */
+            'days_of_week' => ['nullable','array', new DaysOfWeek],
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
+        ]);
+
+        $userHabit->update($request->only([
+            'notification_time',
+            'days_of_week',
+            'start_date',
+            'end_date',
+        ]));
+
+        return new UserHabitResource($userHabit);
+    }
+
+    /**
+     * Delete a user habit
+     */
+    public function destroy(Request $request, $id)
+    {
+        $userHabit = $request->user()->habits()->findOrFail($id);
+        $userHabit->delete();
+
+        return response()->json(['message' => 'User habit deleted successfully.']);
     }
 }

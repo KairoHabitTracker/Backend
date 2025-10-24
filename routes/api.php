@@ -47,6 +47,8 @@ Route::group(
                     function () {
                         Route::get('/', [Api\UserHabitController::class, 'index'])->name('index');
                         Route::post('/', [Api\UserHabitController::class, 'store'])->name('store');
+                        Route::put('/{id}', [Api\UserHabitController::class, 'update'])->name('update');
+                        Route::delete('/{id}', [Api\UserHabitController::class, 'destroy'])->name('destroy');
                     }
                 );
             }
