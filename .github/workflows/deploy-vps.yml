@@ -7,14 +7,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: SSH and deploy
-        uses: cross-the-world/ssh-pipeline@master
+        uses: tiyee/action-ssh@release
         with:
           host: ${{ secrets.SSH_HOST }}
-          user: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_KEY }}
-          script: |
-            cd /var/www/html/kairo.iru.codes && 
-            git pull && 
-            composer install && 
-            pnpm i && 
-            pnpm build
+          username: ${{ secrets.SSH_USER }}
+          privateKey: ${{ secrets.SSH_KEY }}
+          command: 'cd /var/www/html/kairo.iru.codes && git pull && composer install && pnpm i && pnpm build'
