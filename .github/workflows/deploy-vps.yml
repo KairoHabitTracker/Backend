@@ -7,10 +7,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: SSH and deploy
-        id: action-ssh
-        uses: tiyee/action-ssh@v1.0.1
+        uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
-          privateKey: ${{ secrets.SSH_KEY }}
-          command: 'cd /var/www/html/kairo.iru.codes && git pull && composer install && pnpm i && pnpm build'
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd /var/www/html/kairo.iru.codes && git pull && composer install && pnpm i && pnpm build
