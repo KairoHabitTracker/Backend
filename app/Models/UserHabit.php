@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class UserHabits extends Model
+class UserHabit extends Model
 {
     protected $fillable = [
         'user_id',
@@ -23,6 +23,7 @@ class UserHabits extends Model
         'end_date' => 'date',
         'last_completed_at' => 'datetime',
     ];
+
 
     public function user()
     {

@@ -50,4 +50,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(UserInfo::class);
     }
+
+    public function habits()
+    {
+        return $this->hasMany(UserHabit::class);
+    }
 }

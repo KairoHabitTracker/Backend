@@ -38,6 +38,17 @@ Route::group(
             ],
             function () {
                 Route::get('/', [Api\HabitController::class, 'index'])->name('index');
+
+                Route::group(
+                    [
+                        'prefix' => 'user',
+                        'as' => 'user.'
+                    ],
+                    function () {
+                        Route::get('/', [Api\UserHabitController::class, 'index'])->name('index');
+                        Route::post('/', [Api\UserHabitController::class, 'store'])->name('store');
+                    }
+                );
             }
         );
     }
