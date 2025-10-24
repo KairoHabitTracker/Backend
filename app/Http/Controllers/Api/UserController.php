@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 class UserController
 {
     /**
+     * Register a new user
+     *
      * @unauthenticated
      */
     public function store(Request $request)
@@ -36,7 +38,8 @@ class UserController
             'avatar_url' => 'https://api.dicebear.com/9.x/identicon/svg?seed=' . $faker->uuid(),
         ]);
 
-        $token = $user->createToken($request->device_name)->plainTextToken;
-        return response()->json(['token' => $token], 201);
+        return response()->json([
+            'message' => 'User registered successfully',
+        ], 201);
     }
 }

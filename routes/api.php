@@ -27,7 +27,18 @@ Route::group(
     ],
     function () {
         Route::any('/auth/logout', [Api\LoginController::class, 'destroy'])->name('auth.logout');
+        Route::any('/auth/logout-all', [Api\LoginController::class, 'destroyAll'])->name('auth.logoutAll');
 
         Route::get('/profile', [Api\ProfileController::class,'index'])->name('profile.index');
+
+        Route::group(
+            [
+                'prefix' => 'habits',
+                'as' => 'habits.'
+            ],
+            function () {
+                Route::get('/', [Api\HabitController::class, 'index'])->name('index');
+            }
+        );
     }
 );

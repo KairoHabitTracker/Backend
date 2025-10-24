@@ -10,6 +10,7 @@ use Illuminate\Validation\ValidationException;
 class LoginController
 {
     /**
+     * Get a token
      * @unauthenticated
      */
     public function store(Request $request)
@@ -31,9 +32,21 @@ class LoginController
         return response()->json(['token' => $token]);
     }
 
+    /**
+     * Destroy current token
+     */
     public function destroy(Request $request)
     {
-        $request->user()->tokens()->delete();
+        $request->user()->currentAccessToken()->delete();
         return response()->json(['message' => 'Logged out successfully']);
+    }
+
+    /**
+     * Destroy all tokens
+     */
+    public function destroyAll(Request $request)
+    {
+        $request->user()->tokens()->delete();
+        return response()->json(['message' => 'All sessions logged out successfully']);
     }
 }
