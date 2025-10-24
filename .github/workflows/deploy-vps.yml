@@ -13,4 +13,8 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            cd /var/www/html/kairo.iru.codes && git pull && composer install && pnpm i && pnpm build
+            cd /var/www/html/kairo.iru.codes
+            git pull
+            composer install
+            pnpm i
+            pnpm build
