@@ -8,7 +8,7 @@ jobs:
     steps:
       - name: SSH and deploy
         id: action-ssh
-        uses: tiyee/action-ssh@1.0.1
+        uses: tiyee/action-ssh@v1.0.1
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
