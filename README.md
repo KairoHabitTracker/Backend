@@ -20,6 +20,9 @@ This repository contains the code for Kairo Habit Tracker app with docs and an a
     # Run database migrations
     php artisan migrate:fresh --seed
     
+    # Link storage
+    php artisan storage:link
+    
     # Start the development server
     composer run dev
 ```

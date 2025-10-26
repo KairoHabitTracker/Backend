@@ -30,6 +30,10 @@ Route::group(
         Route::any('/auth/logout-all', [Api\LoginController::class, 'destroyAll'])->name('auth.logoutAll');
 
         Route::get('/profile', [Api\ProfileController::class,'index'])->name('profile.index');
+        Route::put('/profile', [Api\ProfileController::class,'update'])->name('profile.update');
+
+        Route::put('/profile/avatar', [Api\ProfileAvatarController::class,'update'])->name('profile.avatar.update');
+        Route::delete('/profile/avatar', [Api\ProfileAvatarController::class,'destroy'])->name('profile.avatar.destroy');
 
         Route::group(
             [
