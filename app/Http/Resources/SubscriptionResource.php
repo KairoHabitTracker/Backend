@@ -2,14 +2,14 @@
 
 namespace App\Http\Resources;
 
-use App\Models\UserHabit;
+use App\Models\Subscription;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * @mixin UserHabit
+ * @mixin Subscription
  */
-class UserHabitResource extends JsonResource
+class SubscriptionResource extends JsonResource
 {
     /**
      * Transform the resource into an array.

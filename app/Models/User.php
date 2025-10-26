@@ -55,4 +55,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(UserHabit::class);
     }
+
+    public function subscription()
+    {
+        return $this->hasOne(Subscription::class);
+    }
 }

@@ -37,6 +37,16 @@ Route::group(
 
         Route::group(
             [
+                'prefix' => 'subscription',
+                'as' => 'subscription.'
+            ],
+            function () {
+                Route::get('/', [Api\SubscriptionController::class, 'index'])->name('index');
+            }
+        );
+
+        Route::group(
+            [
                 'prefix' => 'habits',
                 'as' => 'habits.'
             ],
