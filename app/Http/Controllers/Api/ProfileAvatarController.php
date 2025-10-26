@@ -14,9 +14,9 @@ class ProfileAvatarController
     public function update(Request $request) {
         $request->validate([
             /**
-             * Max size 2MB
+             * Max size 2MB, allowed types: jpeg, png, jpg, webp
              */
-            'avatar' => 'required|image|max:2048',
+            'avatar' => 'required|image|max:2048|mimes:jpeg,png,jpg,webp',
         ]);
 
         $user = $request->user();
