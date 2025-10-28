@@ -49,7 +49,7 @@ class ProfileAvatarController
         }
 
         $info->update([
-            'avatar_url' => $faker->uuid(),
+            'avatar_url' => 'https://api.dicebear.com/9.x/identicon/svg?seed=' . $faker->uuid(),
         ]);
 
         return response()->json([
