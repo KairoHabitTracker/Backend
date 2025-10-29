@@ -10,7 +10,7 @@ Route::any('/logout', [Admin\LoginController::class, 'destroy']);
 
 Route::group(
     [
-        'middleware' => ['auth']
+        'middleware' => ['auth', 'verified'],
     ],
     function () {
         Route::get('/', function () {

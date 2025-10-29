@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
         $user = User::create([
             'email' => config('app.admin_email'),
             'password' => bcrypt(config('app.admin_password', 'password')),
+            'email_verified_at' => now(),
         ]);
 
         $faker = Factory::create();

@@ -23,46 +23,69 @@ Route::group(
 Route::group(
     [
         'middleware' => 'auth:api',
-
     ],
     function () {
-        Route::any('/auth/logout', [Api\LoginController::class, 'destroy'])->name('auth.logout');
-        Route::any('/auth/logout-all', [Api\LoginController::class, 'destroyAll'])->name('auth.logoutAll');
-
-        Route::get('/profile', [Api\ProfileController::class,'index'])->name('profile.index');
-        Route::put('/profile', [Api\ProfileController::class,'update'])->name('profile.update');
-
-        Route::put('/profile/avatar', [Api\ProfileAvatarController::class,'update'])->name('profile.avatar.update');
-        Route::delete('/profile/avatar', [Api\ProfileAvatarController::class,'destroy'])->name('profile.avatar.destroy');
-
         Route::group(
             [
-                'prefix' => 'subscription',
-                'as' => 'subscription.'
+                'prefix' => 'email',
+                'as' => 'verification.'
             ],
             function () {
-                Route::get('/', [Api\SubscriptionController::class, 'index'])->name('index');
+                Route::get('/verify', [Api\EmailVerificationController::class, 'index'])
+                    ->name('notice');
+
+                Route::get('/verify/{id}/{hash}', [Api\EmailVerificationController::class, 'verify'])
+                    ->name('verify')->middleware('signed');
+
+                Route::post('/verification-notification', [Api\EmailVerificationController::class, 'send'])
+                    ->name('send')->middleware('throttle:6,1');
             }
         );
 
+        Route::any('/auth/logout', [Api\LoginController::class, 'destroy'])->name('auth.logout');
+        Route::any('/auth/logout-all', [Api\LoginController::class, 'destroyAll'])->name('auth.logoutAll');
+
         Route::group(
             [
-                'prefix' => 'habits',
-                'as' => 'habits.'
+                'middleware' => 'verified'
             ],
             function () {
-                Route::get('/', [Api\HabitController::class, 'index'])->name('index');
+                Route::get('/profile', [Api\ProfileController::class,'index'])->name('profile.index');
+                Route::put('/profile', [Api\ProfileController::class,'update'])->name('profile.update');
+
+                Route::put('/profile/avatar', [Api\ProfileAvatarController::class,'update'])->name('profile.avatar.update');
+                Route::delete('/profile/avatar', [Api\ProfileAvatarController::class,'destroy'])->name('profile.avatar.destroy');
 
                 Route::group(
                     [
-                        'prefix' => 'user',
-                        'as' => 'user.'
+                        'prefix' => 'subscription',
+                        'as' => 'subscription.'
                     ],
                     function () {
-                        Route::get('/', [Api\UserHabitController::class, 'index'])->name('index');
-                        Route::post('/', [Api\UserHabitController::class, 'store'])->name('store');
-                        Route::put('/{id}', [Api\UserHabitController::class, 'update'])->name('update');
-                        Route::delete('/{id}', [Api\UserHabitController::class, 'destroy'])->name('destroy');
+                        Route::get('/', [Api\SubscriptionController::class, 'index'])->name('index');
+                    }
+                );
+
+                Route::group(
+                    [
+                        'prefix' => 'habits',
+                        'as' => 'habits.'
+                    ],
+                    function () {
+                        Route::get('/', [Api\HabitController::class, 'index'])->name('index');
+
+                        Route::group(
+                            [
+                                'prefix' => 'user',
+                                'as' => 'user.'
+                            ],
+                            function () {
+                                Route::get('/', [Api\UserHabitController::class, 'index'])->name('index');
+                                Route::post('/', [Api\UserHabitController::class, 'store'])->name('store');
+                                Route::put('/{id}', [Api\UserHabitController::class, 'update'])->name('update');
+                                Route::delete('/{id}', [Api\UserHabitController::class, 'destroy'])->name('destroy');
+                            }
+                        );
                     }
                 );
             }

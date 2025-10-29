@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\User;
 use Faker\Factory;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 
 class UserController
@@ -11,6 +12,7 @@ class UserController
     /**
      * Register a new user
      *
+     * If the environment is local, the user will automatically have their email verified.
      * @unauthenticated
      */
     public function store(Request $request)
@@ -37,6 +39,12 @@ class UserController
             'name' => ucfirst(explode('@', $request->email)[0]),
             'avatar_url' => 'https://api.dicebear.com/9.x/identicon/svg?seed=' . $faker->uuid(),
         ]);
+
+        if(app()->environment('local')) {
+            $user->markEmailAsVerified();
+        } else {
+            event(new Registered($user));
+        }
 
         return response()->json([
             'message' => 'User registered successfully',
