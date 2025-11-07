@@ -8,6 +8,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * @mixin Habit
+ *
+ * If user_id is null, it means the habit is a builtin habit.
  */
 class HabitResource extends JsonResource
 {

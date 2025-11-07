@@ -99,6 +99,10 @@ Route::group(
                     ],
                     function () {
                         Route::get('/', [Api\HabitController::class, 'index'])->name('index');
+                        Route::get('/custom', [Api\HabitController::class, 'custom'])->name('custom');
+                        Route::post('/custom', [Api\HabitController::class, 'store'])->name('store');
+                        Route::put('/custom/{id}', [Api\HabitController::class, 'update'])->name('update');
+                        Route::delete('/custom/{id}', [Api\HabitController::class, 'destroy'])->name('destroy');
 
                         Route::group(
                             [

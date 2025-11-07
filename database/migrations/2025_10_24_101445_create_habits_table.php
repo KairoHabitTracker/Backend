@@ -14,6 +14,7 @@ return new class extends Migration
     {
         Schema::create('habits', function (Blueprint $table) {
             $table->id();
+            $table->foreignUlid('user_id')->nullable()->constrained('users')->onDelete('cascade');
             $table->string('name');
             $table->string('emoji');
             $table->string('hex_color', 7);

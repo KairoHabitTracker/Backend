@@ -24,6 +24,8 @@ class UserHabit extends Model
         'last_completed_at' => 'datetime',
     ];
 
+    protected $with = ['habit'];
+
 
     public function user()
     {
