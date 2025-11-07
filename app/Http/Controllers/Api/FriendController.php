@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 
 class FriendController
@@ -10,7 +11,7 @@ class FriendController
      * List friends for the current user.
      */
     public function index(Request $request) {
-        return $request->user()->friends();
+        return UserResource::collection($request->user()->friends);
     }
 
     /**

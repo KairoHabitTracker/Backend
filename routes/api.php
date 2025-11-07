@@ -73,6 +73,17 @@ Route::group(
 
                 Route::group(
                     [
+                        'prefix' => 'friends',
+                        'as' => 'friends.'
+                    ],
+                    function () {
+                        Route::get('/', [Api\FriendController::class, 'index'])->name('index');
+                        Route::delete('/{id}', [Api\FriendController::class, 'destroy'])->name('destroy');
+                    }
+                );
+
+                Route::group(
+                    [
                         'prefix' => 'subscription',
                         'as' => 'subscription.'
                     ],
