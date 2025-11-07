@@ -33,13 +33,6 @@ class UserController
             'password' => bcrypt($request->password),
         ]);
 
-        $faker = Factory::create();
-
-        $user->info()->create([
-            'name' => ucfirst(explode('@', $request->email)[0]),
-            'avatar_url' => 'https://api.dicebear.com/9.x/identicon/svg?seed=' . $faker->uuid(),
-        ]);
-
         if(app()->environment('local')) {
             $user->markEmailAsVerified();
         } else {

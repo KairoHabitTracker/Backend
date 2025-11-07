@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\FriendRequestStatus;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -11,13 +12,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('subscriptions', function (Blueprint $table) {
+        Schema::create('friends', function (Blueprint $table) {
             $table->id();
-            $table->foreignUlid('user_id')->constrained('users')->onDelete('cascade');
-            $table->string('stripe_subscription_id')->unique();
-            $table->string('status');
-            $table->date('current_period_start');
-            $table->date('current_period_end');
+
+            $table->foreignUlid('user1_id')->constrained('users')->onDelete('cascade');
+            $table->foreignUlid('user2_id')->constrained('users')->onDelete('cascade');
+
             $table->timestamps();
         });
     }
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('subscriptions');
+        Schema::dropIfExists('friends');
     }
 };

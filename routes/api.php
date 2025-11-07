@@ -58,6 +58,21 @@ Route::group(
 
                 Route::group(
                     [
+                        'prefix' => 'friend-requests',
+                        'as' => 'friendRequests.'
+                    ],
+                    function () {
+                        Route::get('/received', [Api\FriendRequestController::class, 'received'])->name('received');
+                        Route::get('/sent', [Api\FriendRequestController::class, 'sent'])->name('sent');
+                        Route::post('/', [Api\FriendRequestController::class, 'store'])->name('store');
+                        Route::post('/accept/{id}', [Api\FriendRequestController::class, 'accept'])->name('accept');
+                        Route::post('/reject/{id}', [Api\FriendRequestController::class, 'reject'])->name('reject');
+                        Route::delete('/{id}', [Api\FriendRequestController::class, 'destroy'])->name('destroy');
+                    }
+                );
+
+                Route::group(
+                    [
                         'prefix' => 'subscription',
                         'as' => 'subscription.'
                     ],

@@ -11,8 +11,6 @@ use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-    use WithoutModelEvents;
-
     /**
      * Seed the application's database.
      */
@@ -24,12 +22,8 @@ class DatabaseSeeder extends Seeder
             'email_verified_at' => now(),
         ]);
 
-        $faker = Factory::create();
-
-        $user->info()->create([
-            'name' => 'Admin',
-            'avatar_url' => 'https://api.dicebear.com/9.x/identicon/svg?seed=' . $faker->uuid(),
-            'coins' => 999999
+        $user->info()->update([
+            'coins' => '999999'
         ]);
 
         $habits = [
