@@ -1,0 +1,25 @@
+<?php
+
+namespace Database\Seeders;
+
+use App\Models\User;
+use Illuminate\Database\Seeder;
+
+class UserSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     */
+    public function run(): void
+    {
+        $user = User::create([
+            'email' => config('app.admin_email'),
+            'password' => bcrypt(config('app.admin_password', 'password')),
+            'email_verified_at' => now(),
+        ]);
+
+        $user->info()->update([
+            'coins' => '999999'
+        ]);
+    }
+}
