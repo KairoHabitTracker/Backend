@@ -5,7 +5,7 @@ namespace App\Models;
 use App\Enums\HabitCategory;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Eloquent\Builder;
 
 class Habit extends Model
 {
