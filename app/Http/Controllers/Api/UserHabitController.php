@@ -14,7 +14,7 @@ class UserHabitController
      */
     public function index(Request $request)
     {
-        return UserHabitResource::collection($request->user()->habits);
+        return UserHabitResource::collection($request->user()->habits());
     }
 
     /**
@@ -81,4 +81,55 @@ class UserHabitController
 
         return response()->json(['message' => 'User habit deleted successfully.']);
     }
+//
+//    /**
+//     * Complete a habit
+//     */
+//    public function complete(Request $request, $id)
+//    {
+//        $userHabit = $request->user()->habits()->findOrFail($id);
+//        if($userHabit->end_date && now()->greaterThan($userHabit->end_date)) {
+//            throw ValidationException::withMessages(['end_date' => 'Habit has already ended.']);
+//        }
+//
+//        if($userHabit->last_completed_at && $userHabit->last_completed_at->isToday()) {
+//            throw ValidationException::withMessages(['last_completed_at' => 'Habit already completed today.']);
+//        }
+//
+//        $todayDayOfWeek = strtolower(now()->format('l'));
+//        $daysOfWeek = $userHabit->days_of_week;
+//        if (!in_array($todayDayOfWeek, $daysOfWeek)) {
+//            throw ValidationException::withMessages(['days_of_week' => 'Habit not scheduled for today.']);
+//        }
+//
+//        $lastCompletedAt = $userHabit->last_completed_at;
+//        if($lastCompletedAt && $lastCompletedAt->isAfter(now()->subWeek()->subDay())) {
+//            if(count($daysOfWeek) > 1) {
+//                // Check if there was a scheduled day between last_completed_at and today
+//                $nextScheduledDay = null;
+//                foreach ($daysOfWeek as $day) {
+//                    $dayIndex = array_search($day, ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']);
+//                    $lastCompletedDayIndex = $lastCompletedAt->dayOfWeek;
+//                    $daysUntilNext = ($dayIndex - $lastCompletedDayIndex + 7) % 7;
+//                    if ($daysUntilNext > 0 && $daysUntilNext <= 7) {
+//                        $scheduledDate = $lastCompletedAt->copy()->addDays($daysUntilNext);
+//                        if ($scheduledDate->isBefore(now()) || $scheduledDate->isToday()) {
+//                            $nextScheduledDay = $scheduledDate;
+//                            break;
+//                        }
+//                    }
+//                }
+//                if (is_null($nextScheduledDay) || $nextScheduledDay->isBefore(now()->startOfDay())) {
+//                    $userHabit->streak = 1;
+//                } else {
+//                    $userHabit->streak += 1;
+//                }
+//            } else {
+//                $userHabit->streak = 1;
+//            }
+//        }
+//
+//        $userHabit->last_completed_at = now();
+//        $userHabit->save();
+//    }
 }
