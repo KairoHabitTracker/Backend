@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api;
 use App\Http\Resources\UserHabitResource;
 use App\Rules\DaysOfWeek;
 use Illuminate\Http\Request;
-use Illuminate\Validation\ValidationException;
 
 class UserHabitController
 {
@@ -14,7 +13,7 @@ class UserHabitController
      */
     public function index(Request $request)
     {
-        return UserHabitResource::collection($request->user()->habits());
+        return UserHabitResource::collection($request->user()->habits()->get());
     }
 
     /**
