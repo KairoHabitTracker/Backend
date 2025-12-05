@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Resources\UserHabitResource;
 use App\Rules\DaysOfWeek;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class UserHabitController
 {
@@ -80,55 +81,76 @@ class UserHabitController
 
         return response()->json(['message' => 'User habit deleted successfully.']);
     }
-//
-//    /**
-//     * Complete a habit
-//     */
-//    public function complete(Request $request, $id)
-//    {
-//        $userHabit = $request->user()->habits()->findOrFail($id);
-//        if($userHabit->end_date && now()->greaterThan($userHabit->end_date)) {
-//            throw ValidationException::withMessages(['end_date' => 'Habit has already ended.']);
-//        }
-//
-//        if($userHabit->last_completed_at && $userHabit->last_completed_at->isToday()) {
-//            throw ValidationException::withMessages(['last_completed_at' => 'Habit already completed today.']);
-//        }
-//
-//        $todayDayOfWeek = strtolower(now()->format('l'));
-//        $daysOfWeek = $userHabit->days_of_week;
-//        if (!in_array($todayDayOfWeek, $daysOfWeek)) {
-//            throw ValidationException::withMessages(['days_of_week' => 'Habit not scheduled for today.']);
-//        }
-//
-//        $lastCompletedAt = $userHabit->last_completed_at;
-//        if($lastCompletedAt && $lastCompletedAt->isAfter(now()->subWeek()->subDay())) {
-//            if(count($daysOfWeek) > 1) {
-//                // Check if there was a scheduled day between last_completed_at and today
-//                $nextScheduledDay = null;
-//                foreach ($daysOfWeek as $day) {
-//                    $dayIndex = array_search($day, ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']);
-//                    $lastCompletedDayIndex = $lastCompletedAt->dayOfWeek;
-//                    $daysUntilNext = ($dayIndex - $lastCompletedDayIndex + 7) % 7;
-//                    if ($daysUntilNext > 0 && $daysUntilNext <= 7) {
-//                        $scheduledDate = $lastCompletedAt->copy()->addDays($daysUntilNext);
-//                        if ($scheduledDate->isBefore(now()) || $scheduledDate->isToday()) {
-//                            $nextScheduledDay = $scheduledDate;
-//                            break;
-//                        }
-//                    }
-//                }
-//                if (is_null($nextScheduledDay) || $nextScheduledDay->isBefore(now()->startOfDay())) {
-//                    $userHabit->streak = 1;
-//                } else {
-//                    $userHabit->streak += 1;
-//                }
-//            } else {
-//                $userHabit->streak = 1;
-//            }
-//        }
-//
-//        $userHabit->last_completed_at = now();
-//        $userHabit->save();
-//    }
+
+    /**
+     * Complete a habit
+     */
+    public function complete(Request $request, $id) // I'm going insane
+    {
+        $userHabit = $request->user()->habits()->findOrFail($id);
+        if($userHabit->end_date && now()->greaterThan($userHabit->end_date)) {
+            throw ValidationException::withMessages(['end_date' => 'Habit has already ended.']);
+        }
+
+        $lastCompletion = $userHabit->completions()->latest()->first();
+        if($lastCompletion) {
+            if ($lastCompletion->completed_at->isToday()) {
+                throw ValidationException::withMessages(['last_completed_at' => 'Habit already completed today.']);
+            }
+
+            // Check if the last completion was on the specified last day of the week before today to add to the streak
+            $daysOfWeek = $userHabit->days_of_week; // ex. ['monday', 'wednesday', 'friday']
+            $todayDayOfWeek = now()->englishDayOfWeek->toLowerCase();
+            if (count($daysOfWeek) == 1) { // this means the habit is set to repeat weekly
+                // check if the last completion was exactly one week ago
+                if ($lastCompletion->completed_at->diffInDays(now()) == 7 && $daysOfWeek[0] == $todayDayOfWeek) {
+                    $userHabit->streak += 1;
+                } else {
+                    $userHabit->streak = 1;
+                }
+            } else if (count($daysOfWeek) == 7) { // this means the habit is set to repeat daily
+                // check if the last completion was exactly one day ago
+                if ($lastCompletion->completed_at->diffInDays(now()) == 1) {
+                    $userHabit->streak += 1;
+                } else {
+                    $userHabit->streak = 1;
+                }
+            } else { // this means the habit is set to repeat on different days of the week
+                // check if the last completion was on the day before today in the $daysOfWeek array
+                $lastDayIndex = array_search($todayDayOfWeek, $daysOfWeek) - 1;
+                if ($lastDayIndex < 0) {
+                    $lastDayIndex = count($daysOfWeek) - 1;
+                }
+                $lastDayOfWeek = $daysOfWeek[$lastDayIndex];
+                $lastDayDate = now()->copy()->previous($lastDayOfWeek);
+                if ($lastCompletion->completed_at->isSameDay($lastDayDate)) {
+                    $userHabit->streak += 1;
+                } else {
+                    $userHabit->streak = 1;
+                }
+            }
+        } else {
+            $userHabit->streak = 1;
+        }
+
+        $userHabit->completions()->create();
+        $userHabit->save();
+    }
+
+    /**
+     * Undo a habit completion
+     */
+    public function uncomplete(Request $request, $id)
+    {
+        $userHabit = $request->user()->habits()->findOrFail($id);
+        $lastCompletion = $userHabit->completions()->latest()->first();
+        if(!$lastCompletion || !$lastCompletion->completed_at->isToday()) {
+            throw ValidationException::withMessages(['last_completed_at' => 'No completion found for today to undo.']);
+        }
+
+        $lastCompletion->delete();
+
+        $userHabit->streak = max(0, $userHabit->streak - 1);
+        $userHabit->save();
+    }
 }

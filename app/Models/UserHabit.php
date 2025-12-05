@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 
 class UserHabit extends Model
@@ -14,14 +15,12 @@ class UserHabit extends Model
         'days_of_week',
         'start_date',
         'end_date',
-        'last_completed_at',
     ];
 
     protected $casts = [
         'days_of_week' => 'array',
         'start_date' => 'date',
         'end_date' => 'date',
-        'last_completed_at' => 'datetime',
     ];
 
     protected $with = ['habit'];
@@ -35,5 +34,10 @@ class UserHabit extends Model
     public function habit()
     {
         return $this->belongsTo(Habit::class);
+    }
+
+    public function completions()
+    {
+        return $this->hasMany(UserHabitCompletion::class);
     }
 }

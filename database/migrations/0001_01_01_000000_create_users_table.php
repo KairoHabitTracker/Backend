@@ -25,7 +25,6 @@ return new class extends Migration
             $table->foreignUlid('user_id')->constrained('users')->onDelete('cascade');
             $table->string('name')->nullable();
             $table->string('avatar_url')->nullable();
-            $table->integer('streak')->default(0);
             $table->integer('coins')->default(0);
             $table->timestamps();
         });
