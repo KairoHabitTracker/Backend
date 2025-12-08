@@ -26,8 +26,6 @@ class UserHabit extends Model
 
     protected $with = ['habit'];
 
-    protected $appends = ['last_completed_at'];
-
     public function user()
     {
         return $this->belongsTo(User::class);
