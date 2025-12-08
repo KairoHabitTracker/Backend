@@ -18,6 +18,8 @@ class UserHabitResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return array_merge(parent::toArray($request), [
+            'last_completed_at' => $this->last_completed_at,
+        ]);
     }
 }

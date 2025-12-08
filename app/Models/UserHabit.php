@@ -21,10 +21,12 @@ class UserHabit extends Model
         'days_of_week' => 'array',
         'start_date' => 'date',
         'end_date' => 'date',
+        'last_completed_at' => 'datetime',
     ];
 
     protected $with = ['habit'];
 
+    protected $appends = ['last_completed_at'];
 
     public function user()
     {
@@ -39,5 +41,11 @@ class UserHabit extends Model
     public function completions()
     {
         return $this->hasMany(UserHabitCompletion::class);
+    }
+
+    protected function lastCompletedAt() {
+        return Attribute::make(
+            get: fn ($value) => $this->completions()->latest()->first()->created_at ?? null
+        );
     }
 }
