@@ -41,9 +41,11 @@ class UserHabit extends Model
         return $this->hasMany(UserHabitCompletion::class);
     }
 
-    protected function lastCompletedAt() {
+    protected function lastCompletedAt(): Attribute {
         return Attribute::make(
-            get: fn ($value) => $this->completions()->latest()->first()->created_at ?? null
+            get: fn () => $this->completions()->latest()->first()->created_at ?? null
         );
     }
+
+    protected $appends = ['last_completed_at'];
 }
