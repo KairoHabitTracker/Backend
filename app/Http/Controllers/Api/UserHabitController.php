@@ -94,7 +94,7 @@ class UserHabitController
 
         $lastCompletion = $userHabit->completions()->latest()->first();
         if($lastCompletion) {
-            if ($lastCompletion->completed_at->isToday()) {
+            if ($lastCompletion->created_at->isToday()) {
                 throw ValidationException::withMessages(['last_completed_at' => 'Habit already completed today.']);
             }
 
@@ -103,14 +103,14 @@ class UserHabitController
             $todayDayOfWeek = now()->englishDayOfWeek->toLowerCase();
             if (count($daysOfWeek) == 1) { // this means the habit is set to repeat weekly
                 // check if the last completion was exactly one week ago
-                if ($lastCompletion->completed_at->diffInDays(now()) == 7 && $daysOfWeek[0] == $todayDayOfWeek) {
+                if ($lastCompletion->created_at->diffInDays(now()) == 7 && $daysOfWeek[0] == $todayDayOfWeek) {
                     $userHabit->streak += 1;
                 } else {
                     $userHabit->streak = 1;
                 }
             } else if (count($daysOfWeek) == 7) { // this means the habit is set to repeat daily
                 // check if the last completion was exactly one day ago
-                if ($lastCompletion->completed_at->diffInDays(now()) == 1) {
+                if ($lastCompletion->created_at->diffInDays(now()) == 1) {
                     $userHabit->streak += 1;
                 } else {
                     $userHabit->streak = 1;
@@ -123,7 +123,7 @@ class UserHabitController
                 }
                 $lastDayOfWeek = $daysOfWeek[$lastDayIndex];
                 $lastDayDate = now()->copy()->previous($lastDayOfWeek);
-                if ($lastCompletion->completed_at->isSameDay($lastDayDate)) {
+                if ($lastCompletion->created_at->isSameDay($lastDayDate)) {
                     $userHabit->streak += 1;
                 } else {
                     $userHabit->streak = 1;
@@ -144,7 +144,7 @@ class UserHabitController
     {
         $userHabit = $request->user()->habits()->findOrFail($id);
         $lastCompletion = $userHabit->completions()->latest()->first();
-        if(!$lastCompletion || !$lastCompletion->completed_at->isToday()) {
+        if(!$lastCompletion || !$lastCompletion->created_at->isToday()) {
             throw ValidationException::withMessages(['last_completed_at' => 'No completion found for today to undo.']);
         }
 
