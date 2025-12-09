@@ -47,7 +47,7 @@ class UserHabitController
     /**
      * Update a user habit
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id)
     {
         $userHabit = $request->user()->habits()->findOrFail($id);
 
@@ -74,7 +74,7 @@ class UserHabitController
     /**
      * Delete a user habit
      */
-    public function destroy(Request $request, $id)
+    public function destroy(Request $request, int $id)
     {
         $userHabit = $request->user()->habits()->findOrFail($id);
         $userHabit->delete();
@@ -85,7 +85,7 @@ class UserHabitController
     /**
      * Complete a habit
      */
-    public function complete(Request $request, $id) // I'm going insane
+    public function complete(Request $request, int $id) // I'm going insane
     {
         $userHabit = $request->user()->habits()->findOrFail($id);
         if($userHabit->end_date && now()->greaterThan($userHabit->end_date)) {
@@ -140,7 +140,7 @@ class UserHabitController
     /**
      * Undo a habit completion
      */
-    public function uncomplete(Request $request, $id)
+    public function uncomplete(Request $request, int $id)
     {
         $userHabit = $request->user()->habits()->findOrFail($id);
         $lastCompletion = $userHabit->completions()->latest()->first();

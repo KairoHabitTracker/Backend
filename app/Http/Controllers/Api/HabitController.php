@@ -52,7 +52,7 @@ class HabitController
     /**
      * Update a custom habit
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id)
     {
         $request->validate([
             'name' => 'sometimes|string|max:255',
@@ -73,7 +73,7 @@ class HabitController
     /**
      * Delete a custom habit
      */
-    public function destroy(Request $request, $id) {
+    public function destroy(Request $request, int $id) {
         $habit = Habit::query()->findOrFail($id);
         if ($habit->user_id !== $request->user()->id) {
             return response()->json(['message' => 'You do not have permission to delete this habit'], 403);

@@ -35,7 +35,7 @@ class FriendRequestController
     public function store(Request $request)
     {
         $request->validate([
-            'friend_id' => 'required|exists:users,id',
+            'friend_id' => 'string|required|exists:users,id',
         ]);
 
         $existing = FriendRequest::query()
