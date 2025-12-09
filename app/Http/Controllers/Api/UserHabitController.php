@@ -100,7 +100,7 @@ class UserHabitController
 
             // Check if the last completion was on the specified last day of the week before today to add to the streak
             $daysOfWeek = $userHabit->days_of_week; // ex. ['monday', 'wednesday', 'friday']
-            $todayDayOfWeek = now()->englishDayOfWeek->toLowerCase();
+            $todayDayOfWeek = strtolower(now()->englishDayOfWeek);
             if (count($daysOfWeek) == 1) { // this means the habit is set to repeat weekly
                 // check if the last completion was exactly one week ago
                 if ($lastCompletion->created_at->diffInDays(now()) == 7 && $daysOfWeek[0] == $todayDayOfWeek) {
