@@ -33,6 +33,14 @@ class User extends Authenticatable implements MustVerifyEmail
                 'name' => ucfirst(explode('@', $user->email)[0]),
                 'avatar_url' => 'https://api.dicebear.com/9.x/identicon/svg?seed=' . $faker->uuid(),
             ]);
+
+            $achievements = Achievement::all();
+            foreach ($achievements as $achievement) {
+                $user->achievements()->create([
+                    'achievement_id' => $achievement->id,
+                    'progress' => 0,
+                ]);
+            }
         });
     }
 
@@ -102,5 +110,10 @@ class User extends Authenticatable implements MustVerifyEmail
     public function friendRequestsToMe()
     {
         return $this->belongsToMany(FriendRequest::class, 'friend_requests', 'receiver_id', 'sender_id');
+    }
+
+    public function achievements()
+    {
+        return $this->hasMany(UserAchievement::class);
     }
 }
