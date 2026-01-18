@@ -1,0 +1,58 @@
+services:
+  db:
+    image: mariadb:latest
+    container_name: kairo_db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: kairo
+      MYSQL_USER: kairo_user
+      MYSQL_PASSWORD: kairo_password
+      MYSQL_ROOT_PASSWORD: root_password
+    ports:
+      - "3307:3306"
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    networks:
+      - kairo_network
+    healthcheck:
+      test: [ "CMD", "healthcheck.sh", "--connect", "--innodb_initialized" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: kairo_app
+    restart: unless-stopped
+    working_dir: /var/www/html
+    volumes:
+      - .:/var/www/html
+      - ./storage:/var/www/html/storage
+      - ./bootstrap/cache:/var/www/html/bootstrap/cache
+      - /var/www/html/node_modules
+      - /var/www/html/.pnpm-store
+    ports:
+      - "8000:8000"
+    environment:
+      - DB_CONNECTION=mysql
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_DATABASE=kairo
+      - DB_USERNAME=kairo_user
+      - DB_PASSWORD=kairo_password
+      - DB_SOCKET=
+    depends_on:
+        db:
+            condition: service_healthy
+    networks:
+      - kairo_network
+
+volumes:
+  mariadb_data:
+    driver: local
+
+networks:
+  kairo_network:
+    driver: bridge
+
