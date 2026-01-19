@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\User;
-use Faker\Factory;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 
@@ -33,7 +32,7 @@ class UserController
             'password' => bcrypt($request->password),
         ]);
 
-        if(app()->environment('local')) {
+        if (app()->environment('local')) {
             $user->markEmailAsVerified();
         } else {
             event(new Registered($user));

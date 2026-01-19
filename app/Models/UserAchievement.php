@@ -15,6 +15,8 @@ class UserAchievement extends Model
         'unlocked_at' => 'datetime',
     ];
 
+    protected $with = ['achievement'];
+
     public function achievement()
     {
         return $this->belongsTo(Achievement::class);

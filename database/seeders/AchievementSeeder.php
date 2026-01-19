@@ -43,6 +43,18 @@ class AchievementSeeder extends Seeder
                 'description' => '365-day habit streak',
             ],
             [
+                'identifier' => 'complete_3_habits',
+                'description' => 'Complete 3 habits',
+            ],
+            [
+                'identifier' => 'complete_20_habits',
+                'description' => 'Complete 20 habits',
+            ],
+            [
+                'identifier' => 'complete_50_habits',
+                'description' => 'Complete 50 habits',
+            ],
+            [
                 'identifier' => 'complete_100_habits',
                 'description' => 'Complete 100 habits',
             ],
