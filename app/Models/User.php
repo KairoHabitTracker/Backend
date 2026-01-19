@@ -33,12 +33,11 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
                 'avatar_url' => 'https://api.dicebear.com/9.x/identicon/svg?seed=' . $faker->uuid(),
             ]);
 
-            $achievements = Achievement::all();
-            foreach ($achievements as $achievement) {
+            Achievement::all()->each(function ($achievement) use ($user) {
                 $user->achievements()->create([
                     'achievement_id' => $achievement->id,
                 ]);
-            }
+            });
         });
     }
 
