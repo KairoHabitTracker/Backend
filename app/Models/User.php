@@ -33,12 +33,11 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
                 'avatar_url' => 'https://api.dicebear.com/9.x/identicon/svg?seed=' . $faker->uuid(),
             ]);
 
-            $achievements = Achievement::all();
-            foreach ($achievements as $achievement) {
+            Achievement::all()->each(function ($achievement) use ($user) {
                 $user->achievements()->create([
                     'achievement_id' => $achievement->id,
                 ]);
-            }
+            });
         });
     }
 
@@ -102,12 +101,12 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
 
     public function friendRequestsOfMine()
     {
-        return $this->belongsToMany(FriendRequest::class, 'friend_requests', 'sender_id', 'receiver_id');
+        return $this->hasMany(FriendRequest::class, 'sender_id');
     }
 
     public function friendRequestsToMe()
     {
-        return $this->belongsToMany(FriendRequest::class, 'friend_requests', 'receiver_id', 'sender_id');
+        return $this->hasMany(FriendRequest::class, 'receiver_id');
     }
 
     public function achievements()
