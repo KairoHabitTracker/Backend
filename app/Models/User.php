@@ -102,12 +102,12 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
 
     public function friendRequestsOfMine()
     {
-        return $this->belongsToMany(FriendRequest::class, 'friend_requests', 'sender_id', 'receiver_id');
+        return $this->hasMany(FriendRequest::class, 'sender_id');
     }
 
     public function friendRequestsToMe()
     {
-        return $this->belongsToMany(FriendRequest::class, 'friend_requests', 'receiver_id', 'sender_id');
+        return $this->hasMany(FriendRequest::class, 'receiver_id');
     }
 
     public function achievements()

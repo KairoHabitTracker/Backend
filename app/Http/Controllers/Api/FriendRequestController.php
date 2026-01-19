@@ -15,7 +15,7 @@ class FriendRequestController
     public function received(Request $request)
     {
         return FriendRequestResource::collection(
-            $request->user()->friendRequestsToMe()
+            $request->user()->friendRequestsToMe
         );
     }
 
@@ -25,7 +25,7 @@ class FriendRequestController
     public function sent(Request $request)
     {
         return FriendRequestResource::collection(
-            $request->user()->friendRequestsOfMine()
+            $request->user()->friendRequestsOfMine
         );
     }
 
