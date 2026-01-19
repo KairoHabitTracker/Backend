@@ -115,6 +115,9 @@ Route::group(
                     }
                 );
 
+
+                Route::get('/achievements', [Api\AchievementController::class, 'index'])->name('achievements');
+
                 Route::group(
                     [
                         'prefix' => 'habits',
