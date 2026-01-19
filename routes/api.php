@@ -22,6 +22,19 @@ Route::group(
 
 Route::group(
     [
+        'middleware' => 'guest:api',
+        'prefix' => 'password',
+        'as' => 'password.'
+    ],
+    function () {
+        Route::post('/forgot-password', [Api\ForgotPasswordController::class, 'store'])->name('email');
+        Route::get('/reset-password/{token}', [Api\ForgotPasswordController::class, 'show'])->name('reset');
+        Route::post('/reset-password/{token}', [Api\ForgotPasswordController::class, 'update'])->name('update');
+    }
+);
+
+Route::group(
+    [
         'middleware' => 'auth:api',
     ],
     function () {
@@ -50,11 +63,21 @@ Route::group(
                 'middleware' => 'verified'
             ],
             function () {
-                Route::get('/profile', [Api\ProfileController::class,'index'])->name('profile.index');
-                Route::put('/profile', [Api\ProfileController::class,'update'])->name('profile.update');
+                Route::group(
+                    [
+                        'prefix' => 'profile',
+                        'as' => 'profile.'
+                    ],
+                    function () {
+                        Route::get('/', [Api\ProfileController::class,'index'])->name('index');
+                        Route::put('/', [Api\ProfileController::class,'update'])->name('update');
 
-                Route::put('/profile/avatar', [Api\ProfileAvatarController::class,'update'])->name('profile.avatar.update');
-                Route::delete('/profile/avatar', [Api\ProfileAvatarController::class,'destroy'])->name('profile.avatar.destroy');
+                        Route::put('/avatar', [Api\ProfileAvatarController::class,'update'])->name('avatar.update');
+                        Route::delete('/avatar', [Api\ProfileAvatarController::class,'destroy'])->name('avatar.destroy');
+
+                        Route::put('/password', [Api\ProfilePasswordController::class,'update'])->name('password.update');
+                    }
+                );
 
                 Route::group(
                     [
