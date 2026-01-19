@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('achievements', function (Blueprint $table) {
-            $table->string('id')->primary();
+            $table->id()->primary();
+            $table->string('identifier')->unique();
             $table->string('description');
             $table->string('image_url');
-            $table->integer('goal_value')->default(1);
             $table->timestamps();
         });
     }

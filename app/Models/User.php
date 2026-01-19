@@ -37,7 +37,6 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
             foreach ($achievements as $achievement) {
                 $user->achievements()->create([
                     'achievement_id' => $achievement->id,
-                    'progress' => 0,
                 ]);
             }
         });

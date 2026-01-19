@@ -8,8 +8,6 @@ class UserAchievement extends Model
 {
     protected $fillable = [
         'user_id',
-        'achievement_id',
-        'progress',
         'unlocked_at'
     ];
 
@@ -22,14 +20,24 @@ class UserAchievement extends Model
         return $this->belongsTo(Achievement::class);
     }
 
-    public function addProgress()
-    {
-        if (is_null($this->unlocked_at)) {
-            $this->progress += 1;
-            if($this->progress == $this->achievement()->goal_value) {
-                $this->unlocked_at = now();
-            }
-            $this->save();
+    public static function unlock(string $identifier, User $user) {
+        $achievement = Achievement::where('identifier', $identifier)->first();
+
+        if (!$achievement) {
+            throw new \Exception("Achievement with identifier {$identifier} not found.");
         }
+
+        $userAchievement = self::where('user_id', $user->id)
+            ->where('achievement_id', $achievement->id)
+            ->first();
+
+        if ($userAchievement->unlocked_at !== null) {
+            return $userAchievement;
+        }
+
+        $userAchievement->unlocked_at = now();
+        $userAchievement->save();
+
+        return $userAchievement;
     }
 }

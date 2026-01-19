@@ -15,45 +15,50 @@ class AchievementSeeder extends Seeder
     {
         $achievements = [
             [
-                'id' => 'first_habit',
-                'description' => 'Complete your first habit',
-                'goal_value' => 1,
+                'identifier' => 'first_habit',
+                'description' => 'First habit completed',
             ],
             [
-                'id' => 'habit_streak_7_days',
-                'description' => 'Habit Streak: 7 Days',
-                'goal_value' => 7,
+                'identifier' => 'complete_a_day',
+                'description' => 'Complete all daily habits once',
             ],
             [
-                'id' => 'habit_streak_14_days',
-                'description' => 'Habit Streak: 14 Days',
-                'goal_value' => 14,
+                'identifier' => 'habit_streak_7',
+                'description' => '7-day habit streak',
             ],
             [
-                'id' => 'habit_streak_30_days',
-                'description' => 'Habit Streak: 30 Days',
-                'goal_value' => 30,
+                'identifier' => 'habit_streak_14',
+                'description' => '14-day habit streak',
             ],
             [
-                'id' => 'habit_streak_60_days',
-                'description' => 'Habit Streak: 60 Days',
-                'goal_value' => 60,
+                'identifier' => 'habit_streak_30',
+                'description' => '30-day habit streak',
             ],
             [
-                'id' => 'habit_streak_120_days',
-                'description' => 'Habit Streak: 120 Days',
-                'goal_value' => 120,
+                'identifier' => 'habit_streak_90',
+                'description' => '90-day habit streak',
             ],
             [
-                'id' => 'habit_streak_365_days',
-                'description' => 'Habit Streak: 365 Days',
-                'goal_value' => 365,
+                'identifier' => 'habit_streak_365',
+                'description' => '365-day habit streak',
+            ],
+            [
+                'identifier' => 'complete_100_habits',
+                'description' => 'Complete 100 habits',
+            ],
+            [
+                'identifier' => 'complete_500_habits',
+                'description' => 'Complete 500 habits',
+            ],
+            [
+                'identifier' => 'complete_1000_habits',
+                'description' => 'Complete 1000 habits',
             ],
         ];
 
         Achievement::insert(array_map(function ($achievement) {
             return array_merge($achievement, [
-                'image_url' => Storage::disk('public')->url('achievements/' . $achievement['id'] . '.png'),
+                'image_url' => Storage::disk('public')->url('achievements/' . $achievement['identifier'] . '.png'),
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);

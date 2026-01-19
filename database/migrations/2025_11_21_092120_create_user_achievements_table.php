@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->foreignUlid('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('achievement_id')->constrained('achievements')->onDelete('cascade');
-            $table->integer('progress')->default(0);
             $table->timestamp('unlocked_at')->nullable();
             $table->timestamps();
         });
