@@ -11,7 +11,7 @@ class ProfileController
      * Get current user
      */
     public function index(Request $request): UserResource {
-        return $request->user()->toResource();
+        return UserResource::make($request->user());
     }
 
     /**
@@ -24,6 +24,6 @@ class ProfileController
 
         $request->user()->info->update($request->only('name'));
 
-        return $request->user()->toResource();
+        return UserResource::make($request->user());
     }
 }
