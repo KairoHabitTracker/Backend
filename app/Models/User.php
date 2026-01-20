@@ -34,9 +34,7 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
             ]);
 
             Achievement::all()->each(function ($achievement) use ($user) {
-                $user->achievements()->create([
-                    'achievement_id' => $achievement->id,
-                ]);
+                $user->achievements()->attach($achievement);
             });
         });
     }
