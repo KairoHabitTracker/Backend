@@ -38,6 +38,10 @@ class FriendRequestController
             'friend_id' => 'string|required|exists:users,id',
         ]);
 
+        if ($request->friend_id === $request->user()->id) {
+            return response()->json(['message' => 'You cannot send a friend request to yourself'], 400);
+        }
+
         $existing = FriendRequest::query()
             ->where('sender_id', $request->user()->id)
             ->where('receiver_id', $request->friend_id)->first();
