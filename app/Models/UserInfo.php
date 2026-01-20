@@ -33,4 +33,12 @@ class UserInfo extends Model
             }
         );
     }
+
+    public function largestStreak(): Attribute {
+        return Attribute::make(
+            get: fn ($value) => $this->user->habits()->where('last_completed_at', '!=', null)->max('streak')
+        );
+    }
+
+    protected $appends = ['largest_streak'];
 }
