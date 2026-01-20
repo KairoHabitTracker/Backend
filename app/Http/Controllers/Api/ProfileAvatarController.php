@@ -21,14 +21,15 @@ class ProfileAvatarController
 
         $user = $request->user();
         $avatarPath = $request->file('avatar')->store('avatars', 'public');
+        $publicUrl = Storage::disk('public')->url($avatarPath);
 
         $user->info->update([
-            'avatar_url' => $avatarPath,
+            'avatar_url' => $publicUrl,
         ]);
 
         return response()->json([
             'message' => 'Avatar updated successfully',
-            'avatar_url' => $user->info->avatar_url,
+            'avatar_url' => $publicUrl,
         ]);
     }
 
@@ -43,9 +44,15 @@ class ProfileAvatarController
 
         $info = $request->user()->info;
 
-        if (!str_starts_with($info->avatar_url, 'http')) {
-            $avatarPath = str_replace(asset('storage/avatars/') . '/', '', $info->avatar_url);
-            Storage::disk('public')->delete($avatarPath);
+        if ($info->avatar_url) {
+            $storageBase = asset('storage') . '/';
+
+            if (!str_starts_with($info->avatar_url, 'http')) {
+                Storage::disk('public')->delete($info->avatar_url);
+            } elseif (str_starts_with($info->avatar_url, $storageBase)) {
+                $relativePath = ltrim(str_replace($storageBase, '', $info->avatar_url), '/');
+                Storage::disk('public')->delete($relativePath);
+            }
         }
 
         $info->update([
