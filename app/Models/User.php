@@ -109,6 +109,6 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
 
     public function achievements()
     {
-        return $this->belongsToMany(UserAchievement::class, 'user_achievements')->withTimestamps();
+        return $this->belongsToMany(UserAchievement::class, 'user_achievements', 'user_id', 'achievement_id')->withTimestamps();
     }
 }
