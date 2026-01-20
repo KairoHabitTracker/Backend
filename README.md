@@ -9,7 +9,7 @@ This repository contains the code for Kairo Habit Tracker app with docs and an a
     git clone https://github.com/KairoHabitTracker/Backend && cd Backend
     
     # Install dependencies
-    composer install && pnpm install
+    composer install --no-interaction --optimize-autoloader && pnpm install
     
     # Copy the .env file
     cp .env.example .env # Fill in db credentials
