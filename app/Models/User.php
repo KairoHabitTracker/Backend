@@ -95,10 +95,17 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
 
     public function friends()
     {
-        return $this->belongsToMany(User::class, 'friends', 'user1_id', 'user2_id')
-            ->wherePivotIn('user1_id', [$this->id])
-            ->orWherePivotIn('user2_id', [$this->id]);
+        return User::whereIn('id', function ($q) {
+            $q->selectRaw('CASE
+                WHEN user1_id = ? THEN user2_id
+                ELSE user1_id
+            END', [$this->id])
+                ->from('friends')
+                ->where('user1_id', $this->id)
+                ->orWhere('user2_id', $this->id);
+        });
     }
+
 
     public function friendRequestsOfMine()
     {
