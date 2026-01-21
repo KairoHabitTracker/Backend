@@ -214,6 +214,6 @@ class UserHabitController
     public function completions(Request $request, int $id)
     {
         $userHabit = $request->user()->habits()->findOrFail($id);
-        return $userHabit->completions()->get();
+        return UserHabitResource::collection($userHabit->completions()->get());
     }
 }
