@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Resources\UserHabitCompletionResource;
 use App\Http\Resources\UserHabitResource;
 use App\Models\UserAchievement;
+use App\Models\UserHabitCompletion;
 use App\Rules\DaysOfWeek;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
@@ -214,6 +216,6 @@ class UserHabitController
     public function completions(Request $request, int $id)
     {
         $userHabit = $request->user()->habits()->findOrFail($id);
-        return UserHabitResource::collection($userHabit->completions()->get());
+        return UserHabitCompletionResource::collection($userHabit->completions()->get());
     }
 }
