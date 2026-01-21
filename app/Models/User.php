@@ -34,7 +34,10 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
             ]);
 
             Achievement::all()->each(function ($achievement) use ($user) {
-                $user->achievements()->attach($achievement->id);
+                $user->achievements()->create([
+                    'achievement_id' => $achievement->id,
+                    'unlocked_at' => null,
+                ]);
             });
         });
     }
@@ -109,7 +112,7 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
 
     public function achievements()
     {
-        return $this->belongsToMany(UserAchievement::class, 'user_achievements', 'user_id', 'achievement_id')->withTimestamps();
+        return $this->hasMany(UserAchievement::class, 'user_id');
     }
 
     public function completions()
