@@ -4,7 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api;
 
-Route::get('/', function (Request $request) {
+Route::get('/', function () {
     return response()->json(['message' => 'API is working']);
 });
 
@@ -143,6 +143,7 @@ Route::group(
 
                                 Route::post('/{id}/complete', [Api\UserHabitController::class, 'complete'])->name('complete');
                                 Route::post('/{id}/uncomplete', [Api\UserHabitController::class, 'uncomplete'])->name('uncomplete');
+                                Route::get('/{id}/completions', [Api\UserHabitController::class, 'completions'])->name('completions');
                             }
                         );
                     }

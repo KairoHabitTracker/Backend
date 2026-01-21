@@ -207,4 +207,13 @@ class UserHabitController
         $userHabit->streak = max(0, $userHabit->streak - 1);
         $userHabit->save();
     }
+
+    /**
+     * Get all completions for given habit
+     */
+    public function completions(Request $request, int $id)
+    {
+        $userHabit = $request->user()->habits()->findOrFail($id);
+        return $userHabit->completions()->get();
+    }
 }
