@@ -17,5 +17,7 @@ jobs:
             cd /home/ubuntu/web/kairo.yuri.rocks
             git pull
             composer install
+            export NVM_DIR=~/.nvm
+            source ~/.nvm/nvm.sh
             pnpm i
             pnpm build
