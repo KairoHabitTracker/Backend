@@ -18,7 +18,7 @@ class UserHealthLogController
 
         $request->user()->healthLogs()->create($request->only('date', 'steps', 'sleep_minutes'));
 
-        $request->json([
+        return response()->json([
             'message' => "Health log created successfully"
         ]);
     }
