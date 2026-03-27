@@ -148,6 +148,8 @@ Route::group(
                         );
                     }
                 );
+
+                Route::delete('/account', [Api\UserController::class, 'destroy'])->name('destroy');
             }
         );
     }

@@ -42,4 +42,14 @@ class UserController
             'message' => 'User registered successfully',
         ], 201);
     }
+
+    /**
+     * Delete the authenticated user's account
+     * @authenticated
+     */
+    public function destroy(Request $request)
+    {
+        $request->user()->delete();
+        return response()->json(['message' => 'Account deleted successfully']);
+    }
 }
