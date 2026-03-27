@@ -149,6 +149,16 @@ Route::group(
                     }
                 );
 
+                Route::group(
+                    [
+                        'prefix' => 'health',
+                        'as' => 'health.'
+                    ],
+                    function () {
+                        Route::post('/sync', [Api\UserHealthLogController::class, 'store'])->name('sync');
+                    }
+                );
+
                 Route::delete('/account', [Api\UserController::class, 'destroy'])->name('destroy');
             }
         );

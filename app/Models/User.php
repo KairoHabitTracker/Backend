@@ -128,4 +128,9 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
     {
         return $this->hasMany(UserHabitCompletion::class, 'user_habit_id');
     }
+
+    public function healthLogs()
+    {
+        return $this->hasMany(UserHealthLog::class, 'user_id');
+    }
 }
