@@ -72,6 +72,8 @@ Route::group(
                         Route::get('/', [Api\ProfileController::class,'index'])->name('index');
                         Route::put('/', [Api\ProfileController::class,'update'])->name('update');
 
+                        Route::post('/onboard', [Api\ProfileController::class, 'onboard'])->name('onboard');
+
                         Route::put('/avatar', [Api\ProfileAvatarController::class,'update'])->name('avatar.update');
                         Route::delete('/avatar', [Api\ProfileAvatarController::class,'destroy'])->name('avatar.destroy');
 

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class UserInfo extends Model
 {
@@ -15,11 +16,24 @@ class UserInfo extends Model
         'avatar_url',
         'streak',
         'coins',
+        'age',
+        'onboarded_at'
     ];
+
+    protected $casts = [
+        'onboarded_at' => 'datetime',
+    ];
+
+    protected $with = ['interests'];
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function interests()
+    {
+        return $this->hasMany(UserInterest::class, 'user_id', 'user_id');
     }
 
     protected function avatarUrl(): Attribute {
@@ -44,5 +58,7 @@ class UserInfo extends Model
         );
     }
 
-    protected $appends = ['largest_streak'];
+    protected $appends = [
+        'largest_streak',
+    ];
 }
