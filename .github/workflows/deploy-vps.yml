@@ -21,3 +21,4 @@ jobs:
             source ~/.nvm/nvm.sh
             pnpm i
             pnpm build
+            php artisan test
