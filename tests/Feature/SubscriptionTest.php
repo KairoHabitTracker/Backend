@@ -5,15 +5,15 @@ use App\Models\User;
 
 pest()->use(RefreshDatabase::class);
 
+beforeEach(function () {
+    $this->seed();
+});
+
 function authHeadersSub(): array {
     $user = User::create([
         'email' => 'sub@example.com',
         'password' => 'password12345',
-    ]);
-
-    $user->info()->create([
-        'name' => 'Sub User',
-        'avatar_url' => 'https://example.com/a.svg',
+        'email_verified_at' => now(),
     ]);
 
     $token = $user->createToken('tests')->plainTextToken;
@@ -36,11 +36,9 @@ test('Get subscription when exists', function () {
     $user = User::create([
         'email' => 'sub2@example.com',
         'password' => 'password12345',
+        'email_verified_at' => now(),
     ]);
-    $user->info()->create([
-        'name' => 'Sub User2',
-        'avatar_url' => 'https://example.com/a.svg',
-    ]);
+
     $user->subscription()->create([
         'stripe_subscription_id' => 'sub_123',
         'status' => 'active',

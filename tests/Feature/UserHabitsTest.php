@@ -6,15 +6,15 @@ use App\Models\Habit;
 
 pest()->use(RefreshDatabase::class);
 
+beforeEach(function () {
+    $this->seed();
+});
+
 function authHeadersUserHabits(): array {
     $user = User::create([
         'email' => 'userhabits@example.com',
         'password' => 'password12345',
-    ]);
-
-    $user->info()->create([
-        'name' => 'User Habits',
-        'avatar_url' => 'https://example.com/a.svg',
+        'email_verified_at' => now(),
     ]);
 
     $token = $user->createToken('tests')->plainTextToken;
@@ -23,10 +23,6 @@ function authHeadersUserHabits(): array {
         'Authorization' => 'Bearer ' . $token,
         'Accept' => 'application/json',
     ];
-}
-
-function getAuthUser(): User {
-    return User::where('email', 'userhabits@example.com')->firstOrFail();
 }
 
 test('List user habits', function () {
@@ -41,7 +37,6 @@ test('List user habits', function () {
 test('Create, update and delete a user habit', function () {
     $headers = authHeadersUserHabits();
 
-    $this->seed();
     $habit = Habit::first();
 
     $create = $this->post('/api/habits/user', [
@@ -67,4 +62,33 @@ test('Create, update and delete a user habit', function () {
     $delete = $this->delete("/api/habits/user/{$id}", [], $headers);
     $delete->assertOk();
     $delete->assertJsonStructure(['message']);
+});
+
+test('Complete and uncomplete habit', function () {
+    $headers = authHeadersUserHabits();
+
+    $habit = Habit::first();
+
+    $today = strtolower(now()->englishDayOfWeek);
+
+    $create = $this->post('/api/habits/user', [
+        'habit_id' => $habit->id,
+        'days_of_week' => [$today],
+    ], $headers);
+
+    $id = $create->json('data.id');
+
+    $complete = $this->post("/api/habits/user/{$id}/complete", [], $headers);
+    $complete->assertOk();
+
+    $completions = $this->get("/api/habits/user/{$id}/completions", $headers);
+    $completions->assertOk();
+    $this->assertCount(1, $completions->json('data'));
+
+    $uncomplete = $this->post("/api/habits/user/{$id}/uncomplete", [], $headers);
+    $uncomplete->assertOk();
+
+    $completions = $this->get("/api/habits/user/{$id}/completions", $headers);
+    $completions->assertOk();
+    $this->assertCount(0, $completions->json('data'));
 });

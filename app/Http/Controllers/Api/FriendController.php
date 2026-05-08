@@ -18,7 +18,7 @@ class FriendController
      * Remove a friend
      */
     public function destroy(Request $request, $id) {
-        $friend = $request->user()->friends()->findOrFail($id);
+        $friend = $request->user()->friends->findOrFail($id);
         $friend->delete();
     }
 }

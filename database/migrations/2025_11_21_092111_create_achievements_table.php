@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('achievements', function (Blueprint $table) {
-            $table->id()->primary();
+            $table->id();
             $table->string('identifier')->unique();
             $table->string('description');
             $table->string('image_url');

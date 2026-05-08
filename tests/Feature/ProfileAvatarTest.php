@@ -7,15 +7,15 @@ use App\Models\User;
 
 pest()->use(RefreshDatabase::class);
 
+beforeEach(function () {
+    $this->seed();
+});
+
 function authHeadersAvatar(): array {
     $user = User::create([
         'email' => 'avatar@example.com',
         'password' => 'password12345',
-    ]);
-
-    $user->info()->create([
-        'name' => 'Avatar User',
-        'avatar_url' => 'https://example.com/old.svg',
+        'email_verified_at' => now(),
     ]);
 
     $token = $user->createToken('tests')->plainTextToken;

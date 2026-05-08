@@ -6,9 +6,11 @@ use Illuminate\Support\Facades\Hash;
 
 pest()->use(RefreshDatabase::class);
 
-test('Register a user', function () {
+beforeEach(function () {
     $this->seed();
+});
 
+test('Register a user', function () {
     $response = $this->post('/api/auth/register', [
         'email' => 'example@test.com',
         'password' => 'password123',
@@ -20,13 +22,9 @@ test('Register a user', function () {
 });
 
 test('Login and receive a token', function () {
-    $user = User::create([
+    User::create([
         'email' => 'login@test.com',
         'password' => 'password12345',
-    ]);
-    $user->info()->create([
-        'name' => 'Login User',
-        'avatar_url' => 'https://example.com/a.svg',
     ]);
 
     $response = $this->post('/api/auth/login', [

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use function PHPUnit\Framework\assertNotNull;
 
 class UserAchievement extends Model
 {
@@ -33,6 +34,8 @@ class UserAchievement extends Model
         $userAchievement = self::where('user_id', $user->id)
             ->where('achievement_id', $achievement->id)
             ->first();
+
+        assertNotNull($userAchievement, "UserAchievement record not found for user_id {$user->id} and achievement_id {$achievement->id}");
 
         if ($userAchievement->unlocked_at !== null) {
             return $userAchievement;

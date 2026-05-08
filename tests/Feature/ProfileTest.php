@@ -6,15 +6,15 @@ use App\Models\User;
 
 pest()->use(RefreshDatabase::class);
 
+beforeEach(function () {
+    $this->seed();
+});
+
 function authHeaders(): array {
     $user = User::create([
-        'email' => 'user@example.com',
-        'password' => 'password12345', // hashed by cast
-    ]);
-
-    $user->info()->create([
-        'name' => 'Test User',
-        'avatar_url' => 'https://example.com/avatar.svg',
+        'email' => 'profile@example.com',
+        'password' => 'password12345',
+        'email_verified_at' => now(),
     ]);
 
     $token = $user->createToken('tests')->plainTextToken;
@@ -44,4 +44,20 @@ test('Update current profile', function () {
 
     $response->assertOk();
     $response->assertJsonPath('data.info.name', 'Updated Name');
+});
+
+test('Onboard profile', function () {
+    $headers = authHeaders();
+
+    $response = $this->postJson('/api/profile/onboard', [
+        'name' => 'Onboarded User',
+        'age' => 25,
+        'interests' => ['health', 'work', 'social']
+    ], $headers);
+
+    $response->assertOk();
+    $response->assertJsonPath('data.info.name', 'Onboarded User');
+    $response->assertJsonPath('data.info.age', 25);
+    $this->assertNotNull($response->json('data.info.onboarded_at'));
+    $this->assertCount(3, $response->json('data.info.interests'));
 });
